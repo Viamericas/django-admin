@@ -22,7 +22,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
             try:
                 user_jwt = jwt.decode(
                     token,
-                    settings.SECRET_KEY,
+                    settings.ACCESS_TOKEN_SECRET_KEY,
                     algorithms=['HS256'],
                     options={
                         'verify_exp': True
