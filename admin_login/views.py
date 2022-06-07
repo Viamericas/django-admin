@@ -1,6 +1,7 @@
 from admin_login.utils import generate_access_token
 from django.http.response import HttpResponseRedirect
 from django.contrib.auth.views import LoginView, auth_login, LogoutView
+from django.conf import settings
 
 
 class CustomloginView(LoginView):
@@ -11,7 +12,7 @@ class CustomloginView(LoginView):
 
         access_token = generate_access_token(user)
 
-        response.set_cookie(key='accesstoken', value=access_token, httponly=True)
+        response.set_cookie(key='accesstoken', value=access_token, httponly=True, domain=settings.SESSION_COOKIE_DOMAIN)
 
         return response
 
