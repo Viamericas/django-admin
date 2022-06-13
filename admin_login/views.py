@@ -20,5 +20,5 @@ class CustomloginView(LoginView):
 class CustomLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         response = super().dispatch(request, *args, **kwargs)
-        response.delete_cookie(key='accesstoken')
+        response.delete_cookie(key='accesstoken', domain=settings.SESSION_COOKIE_DOMAIN)
         return response
