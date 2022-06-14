@@ -47,7 +47,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
             response.set_cookie(key='accesstoken', value=access_token, httponly=True,
                                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
 
-        if request.resolver_match.url_name and request.resolver_match.url_name == 'logout':
+        if 'admin/logout' in request.path:
             response.delete_cookie(key='accesstoken', domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
         return response
 
