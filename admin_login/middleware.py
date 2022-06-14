@@ -42,8 +42,9 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         request.user = SimpleLazyObject(lambda: get_user(request))
 
     def process_response(self, request, response):
-        if not request.user.is_anonymous and not request.COOKIES.get('accesstoken'):
-            access_token = generate_access_token(request.user)
+        user = request.user
+        if 'admin/login' in request.path and user.is_authenticated:
+            access_token = generate_access_token(user)
             response.set_cookie(key='accesstoken', value=access_token, httponly=True,
                                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
 
