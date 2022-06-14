@@ -45,10 +45,10 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         if not request.user.is_anonymous and not request.COOKIES.get('accesstoken'):
             access_token = generate_access_token(request.user)
             response.set_cookie(key='accesstoken', value=access_token, httponly=True,
-                                domain=settings.SESSION_COOKIE_DOMAIN)
+                                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
 
         if request.resolver_match.url_name and request.resolver_match.url_name == 'logout':
-            response.delete_cookie(key='accesstoken', domain=settings.SESSION_COOKIE_DOMAIN)
+            response.delete_cookie(key='accesstoken', domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
         return response
 
 
