@@ -51,7 +51,6 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 httponly=True,
                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
                 samesite=settings.ACCESS_TOKEN_COOKIE_SAMESITE,
-                secure=settings.ACCESS_TOKEN_COOKIE_SECURE,
             )
 
         if 'admin/logout' in request.path:
