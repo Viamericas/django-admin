@@ -59,7 +59,6 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 key='accesstoken',
                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
                 samesite=settings.ACCESS_TOKEN_COOKIE_SAMESITE,
-                secure=settings.ACCESS_TOKEN_COOKIE_SECURE,
             )
         return response
 
