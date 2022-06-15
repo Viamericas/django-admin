@@ -37,7 +37,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         user = self.get_jwt_user(request)
-        if not user.is_anonymous:
+        if not user.is_anonymous and not user.is_authenticated:
             auth_login(request, user)
         request.user = SimpleLazyObject(lambda: get_user(request))
 
@@ -50,14 +50,12 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 value=access_token,
                 httponly=True,
                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
-                samesite=settings.ACCESS_TOKEN_COOKIE_SAMESITE,
             )
 
         if 'admin/logout' in request.path:
             response.delete_cookie(
                 key='accesstoken',
                 domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
-                samesite=settings.ACCESS_TOKEN_COOKIE_SAMESITE,
             )
         return response
 
