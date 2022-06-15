@@ -45,11 +45,22 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         user = request.user
         if 'admin/login' in request.path and user.is_authenticated:
             access_token = generate_access_token(user)
-            response.set_cookie(key='accesstoken', value=access_token, httponly=True,
-                                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
+            response.set_cookie(
+                key='accesstoken',
+                value=access_token,
+                httponly=True,
+                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
+                samesite=settings.ACCESS_TOKEN_COOKIE_SAMESITE,
+                secure=settings.ACCESS_TOKEN_COOKIE_SECURE,
+            )
 
         if 'admin/logout' in request.path:
-            response.delete_cookie(key='accesstoken', domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN)
+            response.delete_cookie(
+                key='accesstoken',
+                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
+                samesite=settings.ACCESS_TOKEN_COOKIE_SAMESITE,
+                secure=settings.ACCESS_TOKEN_COOKIE_SECURE,
+            )
         return response
 
 
