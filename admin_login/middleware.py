@@ -36,10 +36,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         return user_jwt
 
     def process_request(self, request):
-        user = self.get_jwt_user(request)
-        if not user.is_anonymous and not user.is_authenticated:
-            auth_login(request, user)
-        request.user = SimpleLazyObject(lambda: get_user(request))
+        request.user = self.get_jwt_user(request)
 
     def process_response(self, request, response):
         user = request.user
