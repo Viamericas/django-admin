@@ -8,6 +8,7 @@ from jwt.exceptions import ExpiredSignatureError
 from admin_login.utils import generate_access_token
 from django.contrib.auth.views import auth_login
 from django.utils.deprecation import MiddlewareMixin
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class JWTAuthenticationMiddleware(MiddlewareMixin):
@@ -33,14 +34,18 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                     email=user_jwt['user_email']
                 )
                 self.logger.info('Find user by token')
-            except ExpiredSignatureError as e:
-                return user_jwt
-        self.logger.info('Not find user by token')
+            except ExpiredSignatureError as error:
+                self.logger.error(error)
+                self.logger.info('Token is incorrect')
+            except ObjectDoesNotExist as error:
+                self.logger.error(error)
+                self.logger.info('Not find user by token')
         return user_jwt
 
     def process_request(self, request):
         request.user = self.get_jwt_user(request)
-        if not request.user.is_anonymous and not request.user.is_authenticated:
+        self.logger.info(f'USER AUTHENTICATED IS {request.user.is_authenticated}')
+        if not request.user.is_anonymous and settings.SESSION_COOKIE_NAME not in request.COOKIES:
             auth_login(request, request.user)
             self.logger.info(f'Login user by token')
 
