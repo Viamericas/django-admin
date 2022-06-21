@@ -15,7 +15,7 @@ Quick start
 	...
 	'django.middleware.csrf.CsrfViewMiddleware',
 	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'admin_login.middleware.JWTAuthenticationMiddleware',
+	'admin_login.middleware.JWTAuthenticationMiddleware', <-- this that your need
 	...
 
 3. Set variables to settings ::
