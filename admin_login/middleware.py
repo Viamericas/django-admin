@@ -16,9 +16,6 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
 
     def get_jwt_user(self, request):
         user_jwt = get_user(request)
-        self.logger.info(f'USER AUTHENTICATED IS {user_jwt.is_authenticated}')
-        if user_jwt.is_authenticated:
-            return user_jwt
         token = request.COOKIES.get('accesstoken', None)
         if token is not None:
             try:
@@ -43,10 +40,11 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         return user_jwt
 
     def process_request(self, request):
-        user = self.get_jwt_user(request)
-        if not user.is_anonymous and settings.SESSION_COOKIE_NAME not in request.COOKIES:
-            auth_login(request, user)
-            self.logger.info(f'Login user by token')
+        if request.user.is_anonymous and settings.SESSION_COOKIE_NAME not in request.COOKIES:
+            user = self.get_jwt_user(request)
+            if not user.is_anonymous:
+                auth_login(request, user)
+                self.logger.info(f'Login user by token')
 
     def process_response(self, request, response):
         user = request.user
