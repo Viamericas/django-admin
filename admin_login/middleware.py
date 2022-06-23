@@ -3,7 +3,6 @@ import logging
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.conf import settings
-from django.contrib.auth.middleware import get_user
 from jwt.exceptions import ExpiredSignatureError
 from admin_login.utils import generate_access_token
 from django.contrib.auth.views import auth_login
@@ -15,7 +14,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
     logger = logging.getLogger('admin_login')
 
     def get_jwt_user(self, request):
-        user_jwt = get_user(request)
+        user_jwt = AnonymousUser()
         token = request.COOKIES.get('accesstoken', None)
         if token is not None:
             try:
