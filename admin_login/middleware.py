@@ -1,13 +1,13 @@
 import jwt
 import logging
 
-from django.contrib.auth.models import AnonymousUser, User
 from django.conf import settings
 from jwt.exceptions import ExpiredSignatureError
 from admin_login.utils import generate_access_token
 from django.contrib.auth.views import auth_login
 from django.utils.deprecation import MiddlewareMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import get_user_model
 
 
 class JWTAuthenticationMiddleware(MiddlewareMixin):
@@ -26,7 +26,8 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                             'verify_exp': True
                         }
                     )
-                    user_jwt = User.objects.get(
+                    user_model = get_user_model()
+                    user_jwt = user_model.objects.get(
                         email=user_jwt['user_email']
                     )
                     self.logger.info('Find user by token')
