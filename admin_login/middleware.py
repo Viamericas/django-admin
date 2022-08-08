@@ -40,7 +40,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                     self.logger.error(error)
                     self.logger.info('Not find user by token')
                 except Exception as error:
-                    self.logger.error(error)
+                    self.logger.exception(error)
 
     def process_response(self, request, response):
         user = request.user
@@ -55,7 +55,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 )
                 self.logger.info(f'Create access token')
             except Exception as error:
-                self.logger.error(error)
+                self.logger.exception(error)
 
         if 'admin/logout' in request.path:
             try:
@@ -65,7 +65,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 )
                 self.logger.info(f'Delete access token')
             except Exception as error:
-                self.logger.error(error)
+                self.logger.exception(error)
         return response
 
 

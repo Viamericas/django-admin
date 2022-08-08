@@ -19,5 +19,5 @@ def generate_access_token(user):
         access_token = jwt.encode(access_token_payload,
                                   settings.ACCESS_TOKEN_SECRET_KEY, algorithm='HS256')
     except Exception as error:
-        logger.error(error)
+        logger.exception(error)
     return access_token
