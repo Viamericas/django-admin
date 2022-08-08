@@ -39,25 +39,33 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 except ObjectDoesNotExist as error:
                     self.logger.error(error)
                     self.logger.info('Not find user by token')
+                except Exception as error:
+                    self.logger.error(error)
 
     def process_response(self, request, response):
         user = request.user
         if 'admin/login' in request.path and user.is_authenticated:
             access_token = generate_access_token(user)
-            response.set_cookie(
-                key='accesstoken',
-                value=access_token,
-                httponly=True,
-                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
-            )
-            self.logger.info(f'Create access token')
+            try:
+                response.set_cookie(
+                    key='accesstoken',
+                    value=access_token,
+                    httponly=True,
+                    domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
+                )
+                self.logger.info(f'Create access token')
+            except Exception as error:
+                self.logger.error(error)
 
         if 'admin/logout' in request.path:
-            response.delete_cookie(
-                key='accesstoken',
-                domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
-            )
-            self.logger.info(f'Delete access token')
+            try:
+                response.delete_cookie(
+                    key='accesstoken',
+                    domain=settings.ACCESS_TOKEN_COOKIE_DOMAIN,
+                )
+                self.logger.info(f'Delete access token')
+            except Exception as error:
+                self.logger.error(error)
         return response
 
 
