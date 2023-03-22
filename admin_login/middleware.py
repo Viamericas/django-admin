@@ -34,11 +34,9 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                     auth_login(request, user_jwt)
                     self.logger.info(f'Login user by token')
                 except ExpiredSignatureError as error:
-                    self.logger.error(error)
-                    self.logger.info('Token is incorrect')
+                    self.logger.warning(error)
                 except ObjectDoesNotExist as error:
-                    self.logger.error(error)
-                    self.logger.info('Not find user by token')
+                    self.logger.warning(error)
                 except Exception as error:
                     self.logger.exception(error)
 

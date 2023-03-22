@@ -2,7 +2,7 @@ Quick start
 -----------
 ``install``::
 
-	pip install git+https://github.com/ivanbat1/django-admin.git@0.0.28
+	pip install git+https://github.com/ivanbat1/django-admin.git@0.0.29
 
 1. Add "admin_login" to your INSTALLED_APPS setting like this::
 
