@@ -2,11 +2,9 @@ import jwt
 import logging
 
 from django.conf import settings
-from jwt.exceptions import ExpiredSignatureError
 from admin_login.utils import generate_access_token
 from django.contrib.auth.views import auth_login
 from django.utils.deprecation import MiddlewareMixin
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth import get_user_model
 
 
