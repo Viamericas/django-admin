@@ -6,7 +6,7 @@ from jwt.exceptions import ExpiredSignatureError
 from admin_login.utils import generate_access_token
 from django.contrib.auth.views import auth_login
 from django.utils.deprecation import MiddlewareMixin
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.contrib.auth import get_user_model
 
 
@@ -33,12 +33,8 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                     self.logger.info('Find user by token')
                     auth_login(request, user_jwt)
                     self.logger.info(f'Login user by token')
-                except ExpiredSignatureError as error:
-                    self.logger.warning(error)
-                except ObjectDoesNotExist as error:
-                    self.logger.warning(error)
                 except Exception as error:
-                    self.logger.exception(error)
+                    self.logger.warning(error)
 
     def process_response(self, request, response):
         user = request.user
@@ -53,7 +49,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 )
                 self.logger.info(f'Create access token')
             except Exception as error:
-                self.logger.exception(error)
+                self.logger.warning(error)
 
         if 'admin/logout' in request.path:
             try:
@@ -63,7 +59,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                 )
                 self.logger.info(f'Delete access token')
             except Exception as error:
-                self.logger.exception(error)
+                self.logger.warning(error)
         return response
 
 
