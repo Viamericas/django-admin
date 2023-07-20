@@ -32,7 +32,9 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
                     auth_login(request, user_jwt)
                     self.logger.info(f'Login user by token')
                 except Exception as error:
-                    self.logger.warning(error)
+                    self.logger.warning(f'{error} \n'
+                                        f'host: {request.build_absolute_uri()} \n'
+                                        f'jwt: {token}')
 
     def process_response(self, request, response):
         user = request.user
